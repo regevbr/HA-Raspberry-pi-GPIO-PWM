@@ -12,8 +12,8 @@ from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_TRANSITION,
     PLATFORM_SCHEMA,
-    SUPPORT_BRIGHTNESS,
-    SUPPORT_TRANSITION,
+    ColorMode,
+    LightEntityFeature,
     LightEntity,
 )
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME, STATE_ON
@@ -34,7 +34,7 @@ DEFAULT_BRIGHTNESS = 255
 DEFAULT_HOST = "localhost"
 DEFAULT_PORT = 8888
 
-SUPPORT_SIMPLE_LED = SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION
+SUPPORT_SIMPLE_LED = LightEntityFeature.TRANSITION
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -112,6 +112,14 @@ class PwmSimpleLed(LightEntity, RestoreEntity):
     def brightness(self):
         """Return the brightness property."""
         return self._brightness
+
+    @property
+    def color_mode(self):
+        return ColorMode.BRIGHTNESS
+
+    @property
+    def supported_color_modes(self):
+        return {ColorMode.BRIGHTNESS}
 
     @property
     def supported_features(self):
